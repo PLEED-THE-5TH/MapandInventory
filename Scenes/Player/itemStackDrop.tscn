@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3 uid="uid://ct2o3rdh635oa"]
+
+[sub_resource type="GDScript" id="GDScript_2cmb5"]
+script/source = "extends CharacterBody3D
+
+class_name ItemStackDrop
+@onready var sprite: Sprite3D = $\"Sprite\"
+@onready var timer: Timer = $\"Timer\"
+@onready var pickup_area: Area3D = $\"Pickup Area\"
+
+var item_stack: ItemStack
+
+func init(init_item_stack: ItemStack) -> void:
+	item_stack = init_item_stack
+	sprite.texture = item_stack.item.icon
+	position = Player.singleton.position
+	item_stack.changed.connect(_on_item_stack_changed)
+
+func _process(delta: float) -> void:
+	_check_pickup()
+	rotate_y(delta)
+	move_and_slide()
+
+func _check_pickup() -> void:
+	if timer.time_left > 0:
+		return
+	
+	if not pickup_area.overlaps_body(Player.singleton):
+		return
+	
+	Player.singleton.inventory.auto_add(item_stack)
+
+func _on_item_stack_changed() -> void:
+	if item_stack.is_empty():
+		queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_he508"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gc80u"]
+radius = 63.0079
+
+[node name="ItemStackDrop" type="CharacterBody2D"]
+script = SubResource("GDScript_2cmb5")
+
+[node name="ItemHitBox" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_he508")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="Pickup Area" type="Area2D" parent="."]
+
+[node name="Pickup Hitbox" type="CollisionShape2D" parent="Pickup Area"]
+shape = SubResource("CircleShape2D_gc80u")
+
+[node name="Timer" type="Timer" parent="."]

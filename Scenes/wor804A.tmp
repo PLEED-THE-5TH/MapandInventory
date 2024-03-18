@@ -1,0 +1,23 @@
+[gd_scene load_steps=6 format=3 uid="uid://br5onlpg20422"]
+
+[ext_resource type="Script" path="res://Scripts/world.gd" id="1_ymmt7"]
+[ext_resource type="PackedScene" uid="uid://c64kexcbra7tu" path="res://Scenes/player.tscn" id="2_4w1v1"]
+[ext_resource type="PackedScene" uid="uid://c7a0ijaxtb84q" path="res://Scenes/pauseMenu.tscn" id="3_4lgwq"]
+[ext_resource type="PackedScene" uid="uid://disr1romhycob" path="res://Scenes/playerInventory.tscn" id="3_5bycu"]
+[ext_resource type="PackedScene" uid="uid://cudhol2mj41di" path="res://Scenes/externalInventory.tscn" id="5_s8m1m"]
+
+[node name="World" type="Node2D"]
+script = ExtResource("1_ymmt7")
+
+[node name="Player" parent="." instance=ExtResource("2_4w1v1")]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" parent="UI" instance=ExtResource("3_4lgwq")]
+visible = false
+
+[node name="PlayerInventory" parent="UI" instance=ExtResource("3_5bycu")]
+visible = false
+
+[node name="ExternalInventory" parent="UI" instance=ExtResource("5_s8m1m")]
+visible = false
